@@ -12,6 +12,25 @@
             <field name="implied_ids" eval="[(4, ref('helpdesk.group_user_helpdesk'))]"/>
         </record>
 
+        <record id="helpdesk_ticket_company_rule" model="ir.rule">
+            <field name="name">HelpDesk Ticket Multi-Company</field>
+            <field name="model_id" ref="model_helpdesk_ticket"/>
+            <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+        </record>
+
+        <record id="helpdesk_rule_personal_ticket" model="ir.rule">
+            <field name="name">Personal Tickets</field>
+            <field ref="model_helpdesk_ticket" name="model_id"/>
+            <field name="domain_force">['|',('user_id','=',user.id),('user_id','=',False)]</field>
+            <field name="groups" eval="[(4, ref('helpdesk.group_user_helpdesk'))]"/>
+        </record>
+
+        <record id="helpdesk_rule_all_ticket" model="ir.rule">
+            <field name="name">All Tickets</field>
+            <field ref="model_helpdesk_ticket" name="model_id"/>
+            <field name="domain_force">[(1,'=',1)]</field>
+            <field name="groups" eval="[(4, ref('helpdesk.group_manager_helpdesk'))]"/>
+        </record>
     </data>
 
 </odoo>

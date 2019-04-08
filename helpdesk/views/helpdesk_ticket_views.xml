@@ -1,71 +1,134 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <odoo>
 
-  <record model="ir.actions.act_window" id="helpdesk_ticket_action">
-      <field name="name">HelpDesk Ticket</field>
-      <field name="res_model">helpdesk.ticket</field>
-      <field name="view_type">form</field>
-      <field name="view_mode">tree,form</field>
-  </record>
+        <record id="ticket_view_form" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.view.form</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <form string="HelpDesk Ticket">
+                    <header>
+                        <button string="Assing to me"
+                        name="assign_to_me"
+                        type="object"/>
+                        <field name="stage_id" widget="statusbar" options="{'clickable': '1'}"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_title">
+                            <h1 class="o_row">
+                                Name:
+                                <field name="name"/>
+                            </h1>
 
-  <menuitem name="Helpdesk" id="helpdesk_menu"
-        action="helpdesk.helpdesk_ticket_action" sequence="5"
-        />
+                        </div>
+                        <group>
+                          <field name="partner_id"/>
+                          <group name="priority">
+                            <field name="priority"/>
+                            <field name="date_deadline"/>
+                          </group>
+                          <group name="data">
+                            <field name="user_id"/>
+                            <field name="team_id"/>
+                            <field name="company_id" readonly="1"/>
+                          </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
 
-  <record model="ir.ui.view" id="helpdesk_ticket_view_form">
-      <field name="name">helpdesk ticket view form</field>
-      <field name="model">helpdesk.ticket</field>
-      <field name="arch" type="xml">
-          <form string="Helpdesk Ticket">
-              <sheet>
-                <h1>
-                  <field name="name" />
-                </h1>
-                  <group>
-                    <field name="partner_id" string="Customer"/>
-                    <field name="description" />
-                    <field name="date_deadline" />
-                    <field name="priority" />
-                    <field name="team_id" />
-                  </group>
-              </sheet>
-              <div class="oe_chatter">
-                  <field name="message_follower_ids" widget="mail_followers"/>
-                  <field name="activity_ids" widget="mail_activity"/>
-                  <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
-              </div>
-          </form>
-      </field>
-  </record>
+        <record id="ticket_view_tree" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.view.tree</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
 
-  <record model="ir.ui.view" id="helpdesk_ticket_view_tree">
-      <field name="name">helpdesk ticket view tree</field>
-      <field name="model">helpdesk.ticket</field>
-      <field name="arch" type="xml">
-          <tree string="Helpdesk Tickets">
-              <field name="name"/>
-              <field name="partner_id" />
-              <field name="description" />
-              <field name="date_deadline" />
-              <field name="priority" />
-          </tree>
-      </field>
-  </record>
+        <record id="view_helpdesk_ticket_kanban" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.kanban</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="priority" eval="100"/>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" archivable="false"  default_group_by="stage_id" >
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="partner_id"/>
+                    <field name="priority"/>
+                    <field name="date_deadline"/>
+                    <field name="user_id"/>
+                    <field name="team_id"/>
+                    <field name="message_needaction_counter"/>
+                    <field name="activity_ids"/>
+                    <field name="activity_state"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div t-attf-class="oe_kanban_content oe_kanban_global_click">
+                                <div>
+                                    <h2><field name="code"/> - <field name="name"/></h2>
+                                </div>
+                                <div>
+                                  Partner:  <span class="o_kanban_record_subtitle"><field name="partner_id"/></span>
+                                </div>
+                                <div>
+                                  Team: <field name="team_id"/>
+                                </div>
+                                <div>
+                                  <field name="date_deadline"/>
+                                </div>
+                                <div class="o_kanban_record_bottom">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="priority" widget="priority"/>
+                                        <t t-if="record.message_needaction_counter.raw_value">
+                                            <span role="alert" class="oe_kanban_mail_new" title="Unread Messages"><i class="fa fa-comments" aria-label="Messages" role="img"/><t t-raw="record.message_needaction_counter.raw_value"/></span>
+                                        </t>
+                                        <div class="o_kanban_inline_block">
+                                            <field name="activity_ids" widget="kanban_activity"/>
+                                        </div>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <img t-att-src="kanban_image('res.users', 'image_small', record.user_id.raw_value)" t-att-title="record.user_id.value" t-att-alt="record.user_id.value" width="24" height="24" class="oe_kanban_avatar float-right"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
 
-  <record model="ir.ui.view" id="helpdesk_ticket_view_search">
-      <field name="name">helpdesk ticket view search</field>
-      <field name="model">helpdesk.ticket</field>
-      <field name="arch" type="xml">
-          <search string="Helpdesk Tickets">
-              <field name="name"/>
-              <field name="partner_id" />
-              <field name="description" />
-              <separator/>
-              <filter string="Very Hight Priority" name="very_hight_priority"
-                domain="[('priority', '=', '3')]" />
-              <filter string="Date limit" name="date_limit" date="date_deadline"/>
-          </search>
-      </field>
-  </record>
+        <record id="helpdesk_ticket_view_search" model="ir.ui.view">
+            <field name="name">helpdesk.ticket.view.search</field>
+            <field name="model">helpdesk.ticket</field>
+            <field name="arch" type="xml">
+                <search string="Search Description">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="description"/>
+                    <separator/>
+                    <filter string="Very High Priority" name="very_high_priority"
+                        domain="[('priority','=','3')]"/>
+                    <filter string="Date limit" name="date_deadline" date="date_deadline"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="helpdesk_ticket_action" model="ir.actions.act_window">
+            <field name="name">Tickets</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">helpdesk.ticket</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="view_type">form</field>
+        </record>
+
+        <menuitem id="helpdesk.menu_hd_ticket" name="Tickets" parent="hd_menu_root"
+            action="helpdesk_ticket_action" sequence="1" groups="base.group_user"/>
 
 </odoo>
