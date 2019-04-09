@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record model="ir.ui.view" id="helpdesk_cause_view_form">
+    <field name="name">helpdesk cause view form</field>
+    <field name="model">helpdesk.cause</field>
+    <field name="arch" type="xml">
+      <form string="Helpdesk Cause">
+        <sheet>
+          <group>
+            <field name="name"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="helpdesk_cause_view_tree">
+    <field name="name">helpdesk cause view tree</field>
+    <field name="model">helpdesk.cause</field>
+    <field name="arch" type="xml">
+      <tree string="Helpdesk Cause">
+        <field name="name"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="helpdesk_cause_view_search">
+    <field name="name">helpdesk cause view search</field>
+    <field name="model">helpdesk.cause</field>
+    <field name="arch" type="xml">
+      <search string="Helpdesk Cause">
+        <field name="name"/>
+      </search>
+    </field>
+  </record>
+
+</odoo>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record model="ir.actions.act_window" id="helpdesk_ticket_action">
+    <field name="name">Helpdesk Ticket</field>
+    <field name="res_model">helpdesk.ticket</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">kanban,tree,form,pivot</field>
+  </record>
+
+  <record model="ir.actions.act_window" id="helpdesk_team_action">
+    <field name="name">Helpdesk Team</field>
+    <field name="res_model">helpdesk.team</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">kanban,tree,form</field>
+  </record>
+
+  <record model="ir.actions.act_window" id="helpdesk_stage_action">
+    <field name="name">Helpdesk Stage</field>
+    <field name="res_model">helpdesk.stage</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+  </record>
+
+  <menuitem id="helpdesk_menu" name="HelpDesk" sequence="5"/>
+
+  <menuitem id="helpdesk_ticket_menu" name="Ticket" action="helpdesk.helpdesk_ticket_action" parent="helpdesk.helpdesk_menu" sequence="10"/>
+
+  <menuitem id="helpdesk_configuration_menu" name="Configuration" parent="helpdesk.helpdesk_menu" sequence="20"/>
+
+  <menuitem id="helpdesk_team_submenu" name="Team" action="helpdesk.helpdesk_team_action" parent="helpdesk.helpdesk_configuration_menu" sequence="10"/>
+
+  <menuitem id="helpdesk_stage_submenu" name="Stage" action="helpdesk.helpdesk_stage_action" parent="helpdesk.helpdesk_configuration_menu" sequence="20"/>
+
+</odoo>

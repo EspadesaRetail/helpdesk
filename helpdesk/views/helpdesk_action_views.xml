@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record model="ir.ui.view" id="helpdesk_action_view_form">
+    <field name="name">helpdesk action view form</field>
+    <field name="model">helpdesk.action</field>
+    <field name="arch" type="xml">
+      <form string="Helpdesk Action">
+        <sheet>
+          <group>
+            <field name="name"/>
+          </group>
+        </sheet>
+      </form>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="helpdesk_action_view_tree">
+    <field name="name">helpdesk action view tree</field>
+    <field name="model">helpdesk.action</field>
+    <field name="arch" type="xml">
+      <tree string="Helpdesk Action">
+        <field name="name"/>
+      </tree>
+    </field>
+  </record>
+
+  <record model="ir.ui.view" id="helpdesk_action_view_search">
+    <field name="name">helpdesk action view search</field>
+    <field name="model">helpdesk.action</field>
+    <field name="arch" type="xml">
+      <search string="Helpdesk Action">
+        <field name="name"/>
+        <field name="ticket_id"/>
+      </search>
+    </field>
+  </record>
+
+</odoo>

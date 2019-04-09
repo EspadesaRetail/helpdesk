@@ -1,38 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <record id="view_helpdesk_team_form" model="ir.ui.view">
-    <field name="name">view.helpdesk_team.form</field>
+
+  <record model="ir.ui.view" id="helpdesk_team_view_form">
+    <field name="name">helpdesk team view form</field>
     <field name="model">helpdesk.team</field>
     <field name="arch" type="xml">
-      <form string="Team">
+      <form string="Helpdesk Team">
         <sheet>
           <group name="main">
-            <field name="code"/>
-            -
-            <field name="name"/>
+            <h1 class="o_row">
+              Name:
+              <field name="code"/> - <field name="name"/>
+            </h1>
           </group>
-          <group name="user" string="Users">
-            <field name="user_ids" nolabel="1"/>
-          </group>
-          <group name="ticket" string="Tickets">
-            <field name="ticket_qty"/>
-            <field name="ticket_ids" nolabel="1" colspan="2"/>
+          <group name="users" string="Users">
+            <group>
+              <field name="user_ids" widget="many2many_tags" nolabel="1"/>
+            </group>
+            <group name="tickets" string="Tickets" colspan="4">
+              <field name="ticket_qty" nolabel="1"/>
+              <field name="ticket_ids" nolabel="1"/>
+            </group>
           </group>
         </sheet>
+        <div class="oe_chatter">
+          <field name="message_follower_ids" widget="mail_followers"/>
+          <field name="activity_ids" widget="mail_activity"/>
+          <field name="message_ids" widget="mail_thread" options="{'post_refresh': 'recipients'}"/>
+        </div>
       </form>
     </field>
   </record>
 
-  <record id="view_helpdesk_team_tree" model="ir.ui.view">
-    <field name="name">view.helpdesk_team.tree</field>
+  <record model="ir.ui.view" id="helpdesk_team_view_tree">
+    <field name="name">helpdesk team view tree</field>
     <field name="model">helpdesk.team</field>
     <field name="arch" type="xml">
-      <tree string="Team">
+      <tree string="Helpdesk Team">
         <field name="code"/>
         <field name="name"/>
+        <field name="user_ids" widget="many2many_tags"/>
+        <field name="ticket_qty"/>
       </tree>
     </field>
   </record>
+
   <record id="view_helpdesk_team_kanban" model="ir.ui.view">
     <field name="name">helpdesk.team.kanban</field>
     <field name="model">helpdesk.team</field>
@@ -55,26 +67,14 @@
     </field>
   </record>
 
-  <record id="view_helpdesk_team_search" model="ir.ui.view">
-    <field name="name">view.helpdesk_team.search</field>
+  <record model="ir.ui.view" id="helpdesk_team_view_search">
+    <field name="name">helpdesk team view search</field>
     <field name="model">helpdesk.team</field>
     <field name="arch" type="xml">
-      <search string="Team">
+      <search string="Helpdesk Team">
         <field name="name"/>
       </search>
     </field>
   </record>
 
-  <record id="helpdesk_team_action" model="ir.actions.act_window">
-    <field name="name">Team</field>
-    <field name="res_model">helpdesk.team</field>
-    <field name="view_mode">kanban,tree,form</field>
-    <field name="help" type="html">
-      <p class="oe_view_nocontent_create">
-        Click to create a new Team.
-      </p>
-    </field>
-  </record>
-
-  <menuitem id="helpdesk.menu_hd_team" name="Team" parent="hd_menu_root" action="helpdesk_team_action" sequence="20" groups="base.group_user"/>
 </odoo>
