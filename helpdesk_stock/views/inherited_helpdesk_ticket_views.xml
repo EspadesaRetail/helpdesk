@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <record model="ir.ui.view" id="inherited_helpdesk_ticket_view_form">
+    <field name="name">inherited helpdesk ticket view form</field>
+    <field name="model">helpdesk.ticket</field>
+    <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//group[@name='global']" position="after">
+        <group name="picking" attrs="{'invisible': [('picking_ids','=',False)]}">
+          <field name="picking_ids"/>
+        </group>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
