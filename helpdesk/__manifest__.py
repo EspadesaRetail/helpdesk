@@ -9,7 +9,7 @@
     "version": "12.0.1.0.0",
     "category": "Customer Relationship Management",
     "website": "",
-    "author": "Espadesa Retail - Alberto Calvo Bazco <alberto.calvo@beds.es>, \n"
+    "author": "Alberto Calvo Bazco <alberto.calvo@beds.es>, \n"
               "Dario Lodeiros Vazquez <dariodafoz@gmail.com>, \n"
               "Angel Moya <angel.moya@pesol.es>, \n"
               "Odoo Community Association (OCA)",

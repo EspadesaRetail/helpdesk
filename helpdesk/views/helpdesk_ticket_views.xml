@@ -24,7 +24,7 @@
               <field name="description" nolabel="1"/>
             </h3>
           </group>
-          <group>
+          <group name="global">
             <group name="priority">
               <field name="priority" widget="priority"/>
               <field name="date_deadline"/>
