@@ -20,7 +20,7 @@
                             </h1>
 
                         </div>
-                        <group>
+                        <group name="global">
                           <field name="partner_id"/>
                           <group name="priority">
                             <field name="priority"/>
