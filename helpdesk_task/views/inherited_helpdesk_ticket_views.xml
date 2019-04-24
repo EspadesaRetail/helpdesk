@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+
+  <record model="ir.ui.view" id="inherited_helpdesk_ticket_view_form">
+    <field name="name">inherited helpdesk ticket view form</field>
+    <field name="model">helpdesk.ticket</field>
+    <field name="inherit_id" ref="helpdesk.ticket_view_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//group[@name='global']" position="after">
+        <group name="project-task">
+          <group name="task">
+            <field name="project_id"
+                   options='{"no_create": True}'/>
+            <field name="task_id"
+                   options='{"no_create": True}'/>
+          </group>
+          <group name="hours">
+            <field name="planned_hours"/>
+          </group>
+        </group>
+      </xpath>
+    </field>
+  </record>
+
+</odoo>
