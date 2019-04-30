@@ -5,3 +5,5 @@ user_helpdesk_team,user_helpdesk_team,model_helpdesk_team,helpdesk.group_user_he
 manager_helpdesk_team,manager_helpdesk_team,model_helpdesk_team,helpdesk.group_manager_helpdesk,1,1,1,1
 access_helpdesk_stage,access_helpdesk_stage,model_helpdesk_stage,helpdesk.group_user_helpdesk,1,0,0,0
 access_helpdesk_stage_admin,access_helpdesk_stage_admin,model_helpdesk_stage,helpdesk.group_manager_helpdesk,1,1,1,1
+access_helpdesk_action,access_helpdesk_action,model_helpdesk_action,helpdesk.group_user_helpdesk,1,0,0,0
+access_helpdesk_action_admin,access_helpdesk_action_admin,model_helpdesk_action,helpdesk.group_manager_helpdesk,1,1,1,1

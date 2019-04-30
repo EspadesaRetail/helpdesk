@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+    <record id="view_helpdesk_action_form" model="ir.ui.view">
+      <field name="name">view.helpdesk_action.form</field>
+      <field name="model">helpdesk.action</field>
+      <field name="arch" type="xml">
+        <form string="HelpDesk Action">
+          <sheet>
+            <group name="main">
+              <field name="name"/>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record id="view_helpdesk_action_tree" model="ir.ui.view">
+      <field name="name">view.helpdesk_action.tree</field>
+      <field name="model">helpdesk.action</field>
+      <field name="arch" type="xml">
+        <tree string="HelpDesk Action">
+          <field name="name" string="Actions"/>
+        </tree>
+      </field>
+    </record>
+
+    <record id="view_helpdesk_action_search" model="ir.ui.view">
+      <field name="name">view.helpdesk_action.search</field>
+      <field name="model">helpdesk.action</field>
+      <field name="arch" type="xml">
+        <search string="HelpDesk Action">
+          <field name="name" />
+        </search>
+      </field>
+    </record>
+
+    <record id="helpdesk_action_action" model="ir.actions.act_window">
+      <field name="name">HelpDesk Action</field>
+      <field name="res_model">helpdesk.action</field>
+      <field name="view_mode">tree,form</field>
+      <field name="help" type="html">
+        <p class="oe_view_nocontent_create">
+          Click to create a new HelpDesk Stage.
+        </p>
+      </field>
+    </record>
+
+
+  <menuitem id="helpdesk.menu_hd_action" parent="helpdesk.menu_hd_config"
+          action="helpdesk_action_action" sequence="10"/>
+
+  </data>
+
+</odoo>

@@ -8,7 +8,6 @@
         <sheet>
           <group name="main">
             <field name="code"/>
-            -
             <field name="name"/>
           </group>
           <group name="user" string="Users">

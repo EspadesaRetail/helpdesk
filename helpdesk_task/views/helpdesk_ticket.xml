@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="helpdesk_ticket_view_form_task" model="ir.ui.view">
+        <field name="name">Helpdesk ticket view form task</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+
+            <field name="partner_id" position="after">
+                <field name="project_id" string="Project" options='{"no_open": True, "no_create": True}' domain="[('partner_id', '=', partner_id)]"/>
+                <field name="task_id" string="Task" options='{"no_open": True, "no_create": True}' domain="[('project_id', '=', project_id)]"/>
+            </field>
+
+            <!--<xpath expr="//notebook/page[@name='page_description']" position="after">-->
+            <xpath expr="//notebook/page[1]" position="after">
+
+                <page name="page_timesheet_ids" string="Timesheets" attrs="{'invisible': [('task_id', '=', False)]}">
+                    <group>
+                        <group>
+                            <field name="planned_hours" widget="float_time"/>
+                            <field name="qty_ordered"/>
+                            <field name="qty_delivered"/>
+                            <field name="progress" widget="progressbar"/>
+                        </group>
+                        <group>
+                            <field name="all_included"/>
+                            <field name="service_policy" readonly="1"/>
+                            <field name="allow_timesheet"/>
+                            <field name="alert_hours" invisible="1"/>
+                        </group>
+                    </group>
+                    <group name="timesheet_warning" attrs="{'invisible': [('alert_hours', '=', False)]}">
+                        <div class="alert alert-warning" role="alert">
+                            Alert!! The hours delivered is greater or equal than the hours ordered.
+                        </div>
+                    </group>
+                    <group name="timesheet_danger" attrs="{'invisible': [('allow_timesheet', '=', True)]}">
+                        <div class="alert alert-danger" role="alert">
+                            You can't input more hours because the hours delivered is greater or equal than the hours ordered.
+                        </div>
+                    </group>
+                    <field name="timesheet_ids" mode="tree" context="{'default_project_id': project_id, 'default_name':''}"
+                           attrs="{'readonly': [('allow_timesheet', '=', False)]}" >
+                        <tree editable="bottom" string="Timesheet Activities" default_order="date">
+                            <field name="date"/>
+                            <field name="user_id" invisible="1"/>
+                            <field name="employee_id" required="1"/>
+                            <field name="name"/>
+                            <field name="unit_amount" widget="timesheet_uom"/>
+                            <field name="project_id" invisible="1"/>
+                        </tree>
+                    </field>
+                    <group>
+                        <group class="oe_subtotal_footer oe_right" name="project_hours">
+                            <field name="effective_hours" widget="float_time" />
+                            <!--<field name="subtask_effective_hours" widget="float_time" attrs="{'invisible' : [('subtask_effective_hours', '=', 0.0)]}" />-->
+                            <field name="total_hours_spent" widget="float_time" class="oe_subtotal_footer_separator"/>
+                            <field name="remaining_hours" widget="float_time" class="oe_subtotal_footer_separator"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+
+        </field>
+    </record>
+</odoo>

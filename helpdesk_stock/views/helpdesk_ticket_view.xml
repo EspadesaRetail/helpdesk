@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+
+  <!-- Inherit Form view -->
+  <record id="ticket_view_form" model="ir.ui.view">
+    <field name="name">stock.ticket.form helpdesk</field>
+    <field name="model">helpdesk.ticket</field>
+    <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+    <field name="arch" type="xml">
+      <field name="action_ids" position="after">
+        <field name="stock_picking_ids"/>
+      </field>
+    </field>
+  </record>
+
+
+</odoo>

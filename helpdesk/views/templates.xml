@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+  <template id="new_helpdesk_ticket" name="New Helpdesk Ticket">
+    <form action="/new_helpdesk_ticket_done" target="_blank">
+      Email:<br/>
+      <input type="text" name="partner_email"/><br/>
+      <input type="text" name="ticket_subjet"/><br/>
+      <input type="text" name="ticket_detail"/><br/>
+      <br/><br/>
+      <input type="submit" value="Submit"/>
+    </form>
+  </template>
+
+  <template id="new_helpdesk_ticket_done" name="New Helpdesk Ticket Done">
+    <p t-esc="partner_email_done"/>
+  </template>
+
+</odoo>
