@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_layout" name="Portal layout: helpdesk menu entry" inherit_id="portal.portal_breadcrumbs" priority="100">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'helpdesk' or helpdesk" t-attf-class="breadcrumb-item #{'active ' if not helpdesk else ''}">
+                <a t-if="ticket" t-attf-href="/my/helpdesk?{{ keep_query() }}">Helpdesk</a>
+                <t t-else="">Helpdesk</t>
+            </li>
+            <li t-if="ticket" class="breadcrumb-item active">
+                <t t-esc="ticket.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home" name="Portal My Home: project entries" inherit_id="portal.portal_my_home" priority="40">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-if="helpdesk_count" t-call="portal.portal_docs_entry">
+                <t t-set="title">Helpdesk</t>
+                <t t-set="url" t-value="'/my/helpdesk'"/>
+                <t t-set="count" t-value="helpdesk_count"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_helpdesk" name="My Helpdesk">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Helpdesk</t>
+            </t>
+            <t t-if="not helpdesk">
+                <div class="alert alert-warning mt8" role="alert">
+                    There are no helpdesk.
+                </div>
+            </t>
+            <t t-if="helpdesk" t-call="portal.portal_table">
+                <tbody>
+                    <tr t-foreach="helpdesk" t-as="ticket">
+                        <td>
+                            <a t-attf-href="/my/helpdesk/#{ticket.id}?{{ keep_query() }}"><span t-field="ticket.name"/></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_my_ticket" name="My Ticket">
+        <t t-call="portal.portal_layout">
+            <t t-set="o_portal_fullwidth_alert" groups="helpdesk.group_user_helpdesk">
+                <t t-call="portal.portal_back_in_edit_mode">
+                    <t t-set="backend_url" t-value="'/web#return_label=Website&amp;model=helpdesk.ticket&amp;id=%s&amp;view_type=form' % (helpdesk.id)"/>
+                </t>
+            </t>
+
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_header">
+                    <div class="row">
+                        <div class="col-md">
+                            <h5 class="mb-0">
+                                <small class="text-muted">Ticket - </small><span t-field="helpdesk.name"/>
+                            </h5>
+                            <h5 class="mb-0">
+                                <small class="text-muted">Description - </small><span t-field="helpdesk.description"/>
+                            </h5>
+                        </div>
+                        <div class="col-md text-md-right">
+                            <small class="text-right">Status:</small>
+                            <span t-field="helpdesk.stage_id.name" class=" badge badge-pill badge-info" title="Current stage of this ticket"/>
+                        </div>
+                    </div>
+                </t>
+                <t t-set="card_body">
+                    <div class="row">
+                        <div t-if="helpdesk.partner_id" class="col-12 col-md-6 mb-2 mb-md-0">
+                            <h6>Customer info</h6>
+                            <div class="row">
+                                <div class="col flex-grow-0 pr-3">
+                                    <img t-if="helpdesk.partner_id.image" class="rounded-circle mt-1 o_portal_contact_img" t-att-src="image_data_uri(helpdesk.partner_id.image)" alt="Contact"/>
+                                    <img t-else="" class="rounded-circle mt-1 o_portal_contact_img" src="/web/static/src/img/user_menu_avatar.png" alt="Contact"/>
+                                </div>
+                                <div class="col pl-sm-0">
+                                    <address t-field="helpdesk.partner_id" t-options='{"widget": "contact", "fields": ["name", "email", "phone"]}'/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div t-if="helpdesk.project_id" class="col-12 col-md-6 mb-2 mb-md-0">
+                            <h6>Project info</h6>
+                            <div class="col pl-sm-5">
+                                <h6 class="mb-2">
+                                    <span class="text-muted">Project - </span><a t-attf-href="/my/project/#{helpdesk.project_id.id}" t-field="helpdesk.project_id.name"/>
+                                </h6>
+                                <h6 class="mb-2">
+                                    <span class="text-muted">Task - </span><a t-attf-href="/my/task/#{helpdesk.task_id.id}" t-field="helpdesk.task_id.name"/>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
