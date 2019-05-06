@@ -22,8 +22,9 @@
         "views/helpdesk_action_views.xml",
         "views/res_users_views.xml",
         "views/templates.xml",
+        "views/helpdesk_portal_templates.xml",
     ],
     "application": True,
     "installable": True,
-    "depends": ["base", "mail"],
+    "depends": ["base", "mail","portal"],
 }
