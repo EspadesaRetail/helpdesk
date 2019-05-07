@@ -66,7 +66,7 @@ class CustomerPortal(CustomerPortal):
         values.update({
             'date': date_begin,
             'date_end': date_end,
-            'helpdesk': tickets,
+            'tickets': tickets,
             'page_name': 'helpdesk',
             #'archive_groups': archive_groups,
             'default_url': '/my/helpdesk',
@@ -87,9 +87,10 @@ class CustomerPortal(CustomerPortal):
         return request.render("helpdesk.portal_my_ticket", values)
 
     def _ticket_check_access(self, model_name, document_id, access_token=None):
+        document_search = request.env[model_name].sudo().search([('id', '=', document_id), ('partner_id.id', '=', request.env.user.partner_id.id)])
         document = request.env[model_name].sudo().browse([document_id])
         document_sudo = document.sudo().exists()
-        if not document_sudo:
+        if not document_sudo or not document_search:
             raise MissingError("This document does not exist.")
         try:
             document.check_access_rights('read')

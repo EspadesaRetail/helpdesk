@@ -3,16 +3,16 @@
     <template id="portal_layout" name="Portal layout: helpdesk menu entry" inherit_id="portal.portal_breadcrumbs" priority="100">
         <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
             <li t-if="page_name == 'helpdesk' or helpdesk" t-attf-class="breadcrumb-item #{'active ' if not helpdesk else ''}">
-                <a t-if="ticket" t-attf-href="/my/helpdesk?{{ keep_query() }}">Helpdesk</a>
+                <a t-if="helpdesk" t-attf-href="/my/helpdesk?{{ keep_query() }}">Helpdesk</a>
                 <t t-else="">Helpdesk</t>
             </li>
-            <li t-if="ticket" class="breadcrumb-item active">
-                <t t-esc="ticket.name"/>
+            <li t-if="helpdesk" class="breadcrumb-item active">
+                <t t-esc="helpdesk.name"/>
             </li>
         </xpath>
     </template>
 
-    <template id="portal_my_home" name="Portal My Home: project entries" inherit_id="portal.portal_my_home" priority="40">
+    <template id="portal_my_home" name="Portal My Home: helpdesk entries" inherit_id="portal.portal_my_home" priority="100">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
             <t t-if="helpdesk_count" t-call="portal.portal_docs_entry">
                 <t t-set="title">Helpdesk</t>
@@ -29,14 +29,14 @@
             <t t-call="portal.portal_searchbar">
                 <t t-set="title">Helpdesk</t>
             </t>
-            <t t-if="not helpdesk">
+            <t t-if="not tickets">
                 <div class="alert alert-warning mt8" role="alert">
                     There are no helpdesk.
                 </div>
             </t>
-            <t t-if="helpdesk" t-call="portal.portal_table">
+            <t t-if="tickets" t-call="portal.portal_table">
                 <tbody>
-                    <tr t-foreach="helpdesk" t-as="ticket">
+                    <tr t-foreach="tickets" t-as="ticket">
                         <td>
                             <a t-attf-href="/my/helpdesk/#{ticket.id}?{{ keep_query() }}"><span t-field="ticket.name"/></a>
                         </td>
@@ -74,7 +74,7 @@
                 <t t-set="card_body">
                     <div class="row">
                         <div t-if="helpdesk.partner_id" class="col-12 col-md-6 mb-2 mb-md-0">
-                            <h6>Customer info</h6>
+                            <h6>Ticket creator info</h6>
                             <div class="row">
                                 <div class="col flex-grow-0 pr-3">
                                     <img t-if="helpdesk.partner_id.image" class="rounded-circle mt-1 o_portal_contact_img" t-att-src="image_data_uri(helpdesk.partner_id.image)" alt="Contact"/>
@@ -97,10 +97,25 @@
                                     <span class="text-muted">Task - </span><a t-attf-href="/my/task/#{helpdesk.task_id.id}" t-field="helpdesk.task_id.name"/>
                                 </h6>
                             </div>
+                            <div t-if="helpdesk.allow_timesheet">
+                                <h6>Task hours</h6>
+                                <div class="col pl-sm-5">
+                                    <h6 class="mb-2">
+                                        <span class="text-muted">Hours Spent - </span><span t-field="helpdesk.effective_hours"/>
+                                    </h6>
+                                    <h6 class="mb-2">
+                                        <span class="text-muted">Total Hours Spent - </span><span t-field="helpdesk.total_hours_spent"/>
+                                    </h6>
+                                    <h6 class="mb-2">
+                                        <span class="text-muted">Remaining Hours - </span><span t-field="helpdesk.remaining_hours"/>
+                                    </h6>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </t>
             </t>
+
         </t>
     </template>
 
