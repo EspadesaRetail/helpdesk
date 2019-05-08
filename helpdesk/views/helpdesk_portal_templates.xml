@@ -34,12 +34,12 @@
             </t>
             <t t-if="not tickets">
                 <div class="alert alert-warning mt8" role="alert">
-                    There are no helpdesk. You can create new <a role="button" href="/my/helpdesk/new" class="btn btn-sm btn-link"><i class="fa fa-pencil"/> Tickets here</a>
+                    There are no helpdesk. You can create new Tickets <a role="button" href="/my/helpdesk/new" class="btn btn-sm btn-link"><i class="fa fa-pencil"/> here</a>
                 </div>
             </t>
             <t t-else="">
                 <div class="alert alert-warning mt8" role="alert">
-                    You can create new <a role="button" href="/my/helpdesk/new" class="btn btn-sm btn-link"><i class="fa fa-pencil"/> Tickets here</a>
+                    You can create new Tickets <a role="button" href="/my/helpdesk/new" class="btn btn-sm btn-link"><i class="fa fa-pencil"/> here</a>
                 </div>
             </t>
             <t t-if="tickets" t-call="portal.portal_table">
