@@ -6,6 +6,9 @@
                 <a t-if="helpdesk" t-attf-href="/my/helpdesk?{{ keep_query() }}">Helpdesk</a>
                 <t t-else="">Helpdesk</t>
             </li>
+            <li t-if="page_name == 'my_new_ticket' or my_new_ticket" t-attf-class="breadcrumb-item #{'active ' if not my_new_ticket else ''}">
+                <a t-attf-href="/my/helpdesk?{{ keep_query() }}">Helpdesk</a>
+            </li>
             <li t-if="helpdesk" class="breadcrumb-item active">
                 <t t-esc="helpdesk.name"/>
             </li>
@@ -14,7 +17,7 @@
 
     <template id="portal_my_home" name="Portal My Home: helpdesk entries" inherit_id="portal.portal_my_home" priority="100">
         <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
-            <t t-if="helpdesk_count" t-call="portal.portal_docs_entry">
+            <t t-call="portal.portal_docs_entry">
                 <t t-set="title">Helpdesk</t>
                 <t t-set="url" t-value="'/my/helpdesk'"/>
                 <t t-set="count" t-value="helpdesk_count"/>
@@ -31,7 +34,12 @@
             </t>
             <t t-if="not tickets">
                 <div class="alert alert-warning mt8" role="alert">
-                    There are no helpdesk.
+                    There are no helpdesk. You can create new <a role="button" href="/my/helpdesk/new" class="btn btn-sm btn-link"><i class="fa fa-pencil"/> Tickets here</a>
+                </div>
+            </t>
+            <t t-else="">
+                <div class="alert alert-warning mt8" role="alert">
+                    You can create new <a role="button" href="/my/helpdesk/new" class="btn btn-sm btn-link"><i class="fa fa-pencil"/> Tickets here</a>
                 </div>
             </t>
             <t t-if="tickets" t-call="portal.portal_table">
@@ -116,6 +124,67 @@
                 </t>
             </t>
 
+        </t>
+    </template>
+
+    <template id="helpdesk_link" inherit_id="portal.portal_layout">
+        <xpath expr="//div[hasclass('o_portal_my_details')]" position="inside">
+            <hr class="mt-1 mb-0"/>
+            <a role="button" href="/my/helpdesk/new" class="btn btn-sm btn-link"><i class="fa fa-pencil"/> New Helpdesk Ticket</a>
+        </xpath>
+    </template>
+
+    <template id="portal_new_ticket" name="New Helpdesk Ticket">
+        <t t-call="portal.portal_layout">
+            <t t-set="additional_title">New Helpdesk Ticket</t>
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">New Helpdesk Ticket</t>
+            </t>
+            <form action="/new/helpdesk" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <div class="row o_portal_details">
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-12">
+                              <div t-if="error_message" class="alert alert-danger" role="alert">
+                                  <t t-foreach="error_message" t-as="err"><t t-esc="err"/><br /></t>
+                              </div>
+                            </div>
+
+                            <div t-attf-class="form-group #{error.get('name') and 'o_has_error' or ''} col-xl-6">
+                                <label class="col-form-label label-optional" for="name">Your Name</label>
+                                <input type="text" name="name" t-attf-class="form-control #{error.get('name') and 'is-invalid' or ''}" t-att-value="name or partner.name" t-att-readonly="1"/>
+                            </div>
+
+                            <div class="clearfix" />
+                            <div t-attf-class="form-group #{error.get('company_name') and 'o_has_error' or ''} col-xl-6">
+                                <label class="col-form-label label-optional" for="company_name">Company Name</label>
+                                <p t-if="partner.commercial_partner_id.is_company" t-attf-class="form-control #{error.get('company_name') and 'is-invalid' or ''}" t-esc="partner.commercial_company_name"/>
+                                <input t-else="" type="text" name="company_name" t-attf-class="form-control #{error.get('company_name') and 'is-invalid' or ''}" t-att-value="company_name or partner.company_name" t-att-readonly="1"/>
+                            </div>
+
+                            <div t-attf-class="form-group #{error.get('ticket_subject') and 'o_has_error' or ''} col-xl-6">
+                                <label class="col-form-label" for="ticket_subject">Subject</label>
+                                <input type="text" name="ticket_subject" t-attf-class="form-control #{error.get('ticket_subject') and 'is-invalid' or ''}" t-att-value="ticket_subject" required="true" />
+                            </div>
+                            <div t-attf-class="form-group #{error.get('ticket_detail') and 'o_has_error' or ''} col-xl-6">
+                                <label class="col-form-label" for="ticket_detail">Details</label>
+                                <input type="text" name="ticket_detail" t-attf-class="form-control #{error.get('ticket_detail') and 'is-invalid' or ''}" t-att-value="ticket_detail" required="true" />
+                            </div>
+
+                            <input type="hidden" name="redirect" t-att-value="redirect"/>
+                        </div>
+                        <div class="clearfix">
+                            <button type="submit" class="btn btn-primary float-right mb32 ">
+                                Create ticket
+                                <span class="fa fa-long-arrow-right" />
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </t>
     </template>
 

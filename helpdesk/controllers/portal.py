@@ -15,6 +15,8 @@ from odoo.osv.expression import OR
 
 class CustomerPortal(CustomerPortal):
 
+    MANDATORY_HELPDESK_FIELDS = ["name", "ticket_subject", "ticket_detail"]
+
     def _prepare_portal_layout_values(self):
         values = super(CustomerPortal, self)._prepare_portal_layout_values()
         values['helpdesk_count'] = request.env['helpdesk.ticket'].sudo().search_count([('partner_id.id', '=', request.env.user.partner_id.id)])
@@ -99,3 +101,68 @@ class CustomerPortal(CustomerPortal):
             if not access_token or not consteq(document_sudo.access_token, access_token):
                 raise
         return document_sudo
+
+    # ------------------------------------------------------------
+    # New Tickets
+    # ------------------------------------------------------------
+    @http.route(['/my/helpdesk/new'], type='http', auth="public", website=True)
+    def portal_new_ticket(self, redirect=None, **post):
+        values = self._prepare_portal_layout_values()
+        partner = request.env.user.partner_id
+        ticket_subject = post.get('ticket_subject')
+        ticket_detail = post.get('ticket_detail')
+        values.update({
+            'error': {},
+            'error_message': [],
+        })
+
+        if post:
+            error, error_message = self.details_form_validate(post)
+            values.update({'error': error, 'error_message': error_message})
+            values.update(post)
+            if not error:
+                values = {key: post[key] for key in self.MANDATORY_HELPDESK_FIELDS}
+                if redirect:
+                    return request.redirect(redirect)
+                return request.redirect('/my/helpdesk')
+
+        values.update({
+            'partner': partner,
+            'redirect': redirect,
+            'ticket_subject': ticket_subject,
+            'ticket_detail': ticket_detail,
+            'page_name': 'my_new_ticket',
+        })
+
+        return request.render('helpdesk.portal_new_ticket', values)
+
+    def details_form_validate(self, data):
+        error = dict()
+        error_message = []
+
+        # Validation
+        for field_name in self.MANDATORY_HELPDESK_FIELDS:
+            if not data.get(field_name):
+                error[field_name] = 'missing'
+
+        # error message for empty required fields
+        if [err for err in error.values() if err == 'missing']:
+            error_message.append(_('Some required fields are empty.'))
+
+        unknown = [k for k in data if k not in self.MANDATORY_HELPDESK_FIELDS]
+        if unknown:
+            error['common'] = 'Unknown field'
+            error_message.append("Unknown field '%s'" % ','.join(unknown))
+
+        return error, error_message
+
+    @http.route(['/new/helpdesk'], type='http', auth="public", website=True)
+    def portal_new_helpdesk(self, **post):
+        partner = request.env.user.partner_id
+        ticket_subject = post.get('ticket_subject')
+        ticket_detail = post.get('ticket_detail')
+        ticket = request.env['helpdesk.ticket'].sudo().create(
+            {'name': ticket_subject,
+             'description': ticket_detail,
+             'partner_id': partner.id})
+        return request.redirect('/my/helpdesk')
