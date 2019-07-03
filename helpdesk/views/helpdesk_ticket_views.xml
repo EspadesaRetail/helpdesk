@@ -31,9 +31,6 @@
                             <field name="user_id"/>
                             <field name="team_id"/>
                             <field name="company_id" readonly="1"/>
-                            <field name="cause"/>
-                            <field name="decision"/>
-                            <field name="action_ids" string="Actions" widget="many2many_tags"/>
                           </group>
                         </group>
                         <notebook>
@@ -41,6 +38,15 @@
                                 <group>
                                     <field name="description" nolabel="1"/>
                                 </group>
+                            </page>
+                            <page name="page_causes" string="Causes" >
+                              <group>
+                                <field name="cause"/>
+                                <field name="decision"/>
+                              </group>
+                              <group>
+                                <field name="action_ids" string="Actions" widget="many2many_tags"/>
+                              </group>
                             </page>
                         </notebook>
                     </sheet>
